@@ -16,5 +16,47 @@ CHIP DMux4Way {
     OUT a, b, c, d;
 
     PARTS:
-    // Put your code here:
+
+    // Derivation:
+    // a = (sel[0] == 0 and sel[1] == 0 and in)
+    //   = (sel[0]' and sel[1]' and in)
+    // b = (sel[0] == 1 and sel[1] == 0 and in)
+    //   = (sel[0] and sel[1]' and in)
+    // c = (sel[0] == 0 and sel[1] == 1 and in)
+    //   = (sel[0]' and sel[1] and in)
+    // d = (sel[0] == 1 and sel[1] == 1 and in)
+    //   = (sel[0] and sel[1] and in)
+
+
+    // Not(in=sel[0], out=notsel0);
+    // Not(in=sel[1], out=notsel1);
+
+    // And(a=notsel0, b=notsel1, out=pa);
+    // And(a=sel[0], b=notsel1, out=pb);
+    // And(a=notsel0, b=sel[1], out=pc);
+    // And(a=sel[0], b=sel[1], out=pd);
+
+    // And(a=in, b=pa, out=a);
+    // And(a=in, b=pb, out=b);
+    // And(a=in, b=pc, out=c);
+    // And(a=in, b=pd, out=d);
+
+    //  Alternative variant (based on atomic DMux,
+    // with lots of unused outputs: nu1, nu2, etc.):
+    // DMux(in=in, sel=sel[0], a=a2, b=nu1);
+    // DMux(in=a2, sel=sel[1], a=a, b=nu2);
+
+    // DMux(in=in, sel=sel[0], a=nu3, b=a3);
+    // DMux(in=a3, sel=sel[1], a=b, b=nu4);
+
+    // DMux(in=in, sel=sel[0], a=a4, b=nu5);
+    // DMux(in=a4, sel=sel[1], a=nu6, b=c);
+
+    // DMux(in=in, sel=sel[0], a=nu7, b=a5);
+    // DMux(in=a5, sel=sel[1], a=nu8, b=d);
+
+    // I think we should use unused outputs to make it shorter!
+    DMux(in=in, sel=sel[0], a=a0, b=a1);
+    DMux(in=a0, sel=sel[1], a=a, b=c);
+    DMux(in=a1, sel=sel[1], a=b, b=d);
 }

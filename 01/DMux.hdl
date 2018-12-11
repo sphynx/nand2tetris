@@ -14,7 +14,8 @@ CHIP DMux {
     OUT a, b;
 
     PARTS:
-    // Put your code here:
+
+    // Derivation:
     // a = (sel == 0 and in) or (sel == 1 and 0)
     //   = (sel == 0 and in) or 0
     //   = (sel == 0 and in)
@@ -23,6 +24,7 @@ CHIP DMux {
     // b = (sel == 0 and 0) or (sel == 1 and in)
     //   = (sel == 1 and in)
     //   = (sel and in)
+
     Not(in=sel, out=notsel);
     And(a=notsel, b=in, out=a);
     And(a=sel, b=in, out=b);
